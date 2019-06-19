@@ -1,0 +1,42 @@
+<ul class="nav nav-pills">
+  <li class="nav-item">
+    <a class="nav-link" href="javascript:void(0)" (click)="statusChange.emit('invalid')" [class.active]="dashboardStatus == 'invalid'">Invalid</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="javascript:void(0)" (click)="statusChange.emit('temp')" [class.active]="dashboardStatus == 'temp'">Temporary</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="javascript:void(0)" (click)="statusChange.emit('resolved')" [class.active]="dashboardStatus == 'resolved'">Resolved</a>
+  </li>
+</ul>
+<br>
+<table width='100%' class="table table-striped">
+  <tr>
+    <th scope="col" sortable="created_date" (sort)="onSort.emit($event)">Created Date</th>
+    <th>Employee ID</th>
+    <th scope="col" sortable="first_name" (sort)="onSort.emit($event)">First Name</th>
+    <th scope="col" sortable="last_name" (sort)="onSort.emit($event)">Last Name</th>
+    <th scope="col" sortable="department" (sort)="onSort.emit($event)">Department</th>
+    <th scope="col" sortable="last_user" (sort)="onSort.emit($event)">Last User</th>
+    <th>Status</th>
+    <th *ngIf="dashboardStatus === 'invalid' || dashboardStatus === 'temp'">Action</th>
+  </tr>
+
+  <tr *ngFor="let request of requests | async | slice:(pageSize*pageIndex):(pageSize*pageIndex+pageSize)">
+    <td>{{ request.created_date | date:'medium' }}</td>
+    <td>{{ request.employee_id }}</td>
+    <td>{{ request.first_name }}</td>
+    <td>{{ request.last_name }}</td>
+    <td>{{ request.department }}</td>
+    <td>{{ request.last_user }}</td>
+    <td>{{ request.status }}</td>
+    <td *ngIf="dashboardStatus === 'invalid'">
+      <button class="btn btn-info" (click)="requestTemp.emit(request)">Temporary</button>
+      &nbsp;
+      <button class="btn btn-success"(click)="requestResolved.emit(request)">Resolve</button>
+    </td>
+    <td *ngIf="dashboardStatus === 'temp'">
+      <button class="btn btn-success"(click)="requestResolved.emit(request)">Resolve</button>
+    </td>
+  </tr>
+</table>

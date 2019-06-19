@@ -1,0 +1,27 @@
+<div class="container">
+    <h1>Carnegie Invalid SSN Dashboard</h1>
+</div>
+<br>
+<mat-card  class="container">
+    <h2 *ngIf="auth !== 'true'">Please log into <a href="https://mycarnegie.carnegiescience.edu">myCarnegie</a> first</h2>
+    <h3 *ngIf="auth !== 'true'">Your email is: {{ user_email }}</h3>
+
+    <br>
+    <!--display requests if authed-->
+    <app-request-list *ngIf="auth === 'true'"
+            [requests]="requests$"
+            [dashboardStatus]="dashboardStatus"
+            [pageSize]="pageEvent?pageEvent.pageSize:this.pageSize"
+            [pageIndex]="pageEvent?pageEvent.pageIndex:0"
+            (requestTemp)="tempRequest($event)"
+            (requestResolved)="resolveRequest($event)"
+            (statusChange)="changeStatus($event)"
+            (onSort)="sortRequests($event)"
+    >
+    </app-request-list>
+    <mat-paginator [length]="(requests$ | async)?.length"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="pageSizeOptions"
+                   (page)="pageEvent = $event">
+    </mat-paginator>
+</mat-card >
