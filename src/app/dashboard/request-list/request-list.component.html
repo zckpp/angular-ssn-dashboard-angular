@@ -19,6 +19,7 @@
     <th scope="col" sortable="department" (sort)="onSort.emit($event)">Department</th>
     <th scope="col" sortable="last_user" (sort)="onSort.emit($event)">Last User</th>
     <th>Status</th>
+    <th>Hire Date</th>
     <th *ngIf="dashboardStatus === 'invalid' || dashboardStatus === 'temp'">Action</th>
   </tr>
 
@@ -30,6 +31,7 @@
     <td>{{ request.department }}</td>
     <td>{{ request.last_user }}</td>
     <td>{{ request.status }}</td>
+    <td>{{ request.hire_date | date:'mediumDate'}}</td>
     <td *ngIf="dashboardStatus === 'invalid'">
       <button class="btn btn-info" (click)="requestTemp.emit(request)">Temporary</button>
       &nbsp;

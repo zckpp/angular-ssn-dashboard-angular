@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ApiService } from '../api.service';
 import { SortableDirective, SortEvent, Compare } from '../sortable.directive';
 import { Request } from '../request';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, startWith, switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from "rxjs";
 import { MatSnackBar, PageEvent } from '@angular/material';
@@ -15,12 +16,11 @@ import { MatSnackBar, PageEvent } from '@angular/material';
 export class DashboardComponent implements OnInit {
 
   // variables
-
   // postfix dollar sign for observables
   requests$: Observable<Request[]>;
   dashboardStatus: string;
-  auth: string = "false";
-  user_email: string;
+  termFilter = new FormControl('');
+  user: string;
 
   constructor(
       private apiService: ApiService,
@@ -31,9 +31,23 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     // start with request list with pending status
     this.changeStatus("invalid");
-    this.auth = this.cookieService.get('angular-php-sar');
-    console.log(this.auth);
-    this.user_email = this.cookieService.get('email_cookie');
+    this.user = this.cookieService.get('ssn_app_user_name');
+    this.requests$ = this.termFilter.valueChanges
+        .pipe(
+            //start with empty string to show all result
+            startWith<string>(""),
+            debounceTime(200),
+            distinctUntilChanged(),
+            switchMap(term => this.apiService.searchRequests(this.dashboardStatus, term)
+                // .pipe(
+                //     map(
+                //         (requests) => {
+                //           return requests.filter((request) => { return request.status.includes(this.dashboardStatus); });
+                //         }
+                //     ),
+                // )
+            ),
+        );
   }
 
   // methods
@@ -75,14 +89,24 @@ export class DashboardComponent implements OnInit {
 
   // get different view based on status then pass it down to request list display
   changeStatus(status) {
-    this.requests$ = this.apiService.readRequests().pipe(
-        map(
-            (requests) => {
-              return requests.filter((request) => { return request.status.includes(status); });
-            }
-        ),
-    );
     this.dashboardStatus = status;
+    this.termFilter.setValue("");
+    this.requests$ = this.termFilter.valueChanges
+        .pipe(
+            //start with empty string to show all result
+            startWith<string>(""),
+            debounceTime(200),
+            distinctUntilChanged(),
+            switchMap(term => this.apiService.searchRequests(this.dashboardStatus, term)
+                // .pipe(
+                //     map(
+                //         (requests) => {
+                //           return requests.filter((request) => { return request.status.includes(this.dashboardStatus); });
+                //         }
+                //     ),
+                // )
+            ),
+        );
   }
 
   // sort requests

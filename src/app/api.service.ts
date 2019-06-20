@@ -9,18 +9,19 @@ import { tap, map } from 'rxjs/operators';
     providedIn: 'root'
 })
 export class ApiService {
-    PHP_API_SERVER = "http://127.0.0.1/angular-ssn/backend/api";
-    PHP_API_SERVER = "https://mycarnegie.carnegiescience.edu/sites/default//backend/api";
+    // PHP_API_SERVER = "http://127.0.0.1/angular-ssn/backend/api";
+    PHP_API_SERVER = "https://mycarnegie.carnegiescience.edu/sites/default/ssn/backend/api";
     constructor(private httpClient: HttpClient) {}
 
-    readRequests(): Observable<Request[]>{
-        return this.httpClient.get<Request[]>(`${this.PHP_API_SERVER}/read.php`)
-            .pipe(
+    readRequests(status: string): Observable<Request[]>{
+        return this.httpClient.get<Request[]>(`${this.PHP_API_SERVER}/read.php?status=${status}`).pipe(
             tap(requests => {
                 requests.forEach(function (request) {
                     // covert mysql datetime into js date
-                    let t = request.created_date.split(/[- :]/);
-                    request.created_date = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
+                    let ct = request.created_date.split(/[- :]/);
+                    request.created_date = new Date(Date.UTC(ct[0], ct[1]-1, ct[2], ct[3], ct[4], ct[5]));
+                    let ht = request.hire_date.split(/[- :]/);
+                    request.hire_date = new Date(Date.UTC(ht[0], ht[1]-1, ht[2], ht[3], ht[4], ht[5]));
                 });
             }),
             // sort by created date
@@ -28,22 +29,20 @@ export class ApiService {
         );
     }
 
-    searchRequests(term: string): Observable<Request[]>{
-        return this.httpClient.post<Request[]>(`${this.PHP_API_SERVER}/read.php`, term).pipe(
+    searchRequests(status: string, term: string): Observable<Request[]>{
+        return this.httpClient.post<Request[]>(`${this.PHP_API_SERVER}/read.php?status=${status}`, term).pipe(
             tap(requests => {
                 requests.forEach(function (request) {
                     // covert mysql datetime into js date
-                    let gt = request.granted_date.split(/[- :]/);
-                    request.granted_date = new Date(Date.UTC(gt[0], gt[1]-1, gt[2], gt[3], gt[4], gt[5]));
+                    let ct = request.created_date.split(/[- :]/);
+                    request.created_date = new Date(Date.UTC(ct[0], ct[1]-1, ct[2], ct[3], ct[4], ct[5]));
+                    let ht = request.hire_date.split(/[- :]/);
+                    request.hire_date = new Date(Date.UTC(ht[0], ht[1]-1, ht[2], ht[3], ht[4], ht[5]));
                 });
             }),
-            // sort by granted date
-            tap(requests => { requests.sort((a,b) => { return b.granted_date-a.granted_date; }); })
+            // sort by created date
+            tap(requests => { requests.sort((a,b) => { return b.created_date-a.created_date; }); })
         );
-    }
-
-    createRequest(request: Request): Observable<Request>{
-        return this.httpClient.post<Request>(`${this.PHP_API_SERVER}/create.php`, request);
     }
 
     updateRequest(request: Request){
@@ -53,18 +52,4 @@ export class ApiService {
     deleteRequest(id: number){
         return this.httpClient.delete<Request>(`${this.PHP_API_SERVER}/delete.php/?id=${id}`);
     }
-
-    readCategories(): Observable<CategoryGroup[]>{
-        return this.httpClient.get<any>(`${this.PHP_API_SERVER}/readCategory.php`).pipe(
-            // sort alphabetically by category
-            tap(categoryGroups => { categoryGroups.forEach(function (categoryGroup) {
-                categoryGroup.category.sort((a,b) => {
-                    if(a.label < b.label) { return -1; }
-                    if(a.label > b.label) { return 1; }
-                    return 0;
-                });
-            }); })
-        );
-    }
-
 }

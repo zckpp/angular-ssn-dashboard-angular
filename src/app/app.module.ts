@@ -6,18 +6,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { RequestListComponent } from './dashboard/request-list/request-list.component';
 import { CookieService } from 'ngx-cookie-service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { RequestListComponent } from './dashboard/request-list/request-list.component';
 import { SortableDirective } from './sortable.directive';
-import { FormRequestComponent } from './form-request/form-request.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatFormFieldModule, MatAutocompleteModule, MatSelectModule, MatCardModule, MatSnackBarModule, MatPaginatorModule } from '@angular/material';
-import { DashboardGrantComponent } from './dashboard-grant/dashboard-grant.component';
-import { RequestListGrantComponent } from './dashboard-grant/request-list-grant/request-list-grant.component';
-import { SearchComponent } from './search/search.component';
-import { RequestListSearchComponent } from './search/request-list-search/request-list-search.component';
-import { FormCategoryComponent } from './form-category/form-category.component';
+
 
 @NgModule({
   declarations: [
@@ -25,12 +20,6 @@ import { FormCategoryComponent } from './form-category/form-category.component';
     DashboardComponent,
     RequestListComponent,
     SortableDirective,
-    FormRequestComponent,
-    DashboardGrantComponent,
-    RequestListGrantComponent,
-    SearchComponent,
-    RequestListSearchComponent,
-    FormCategoryComponent,
   ],
   imports: [
     BrowserModule,
