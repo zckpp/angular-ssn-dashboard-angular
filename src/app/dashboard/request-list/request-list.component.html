@@ -10,19 +10,18 @@
   </li>
 </ul>
 <br>
-<table width='100%' class="table table-striped">
+<table width='100%' class="table table-striped" matSort (matSortChange)="sortData.emit($event)">
   <tr>
-    <th scope="col" sortable="created_date" (sort)="onSort.emit($event)">Created Date</th>
+    <th mat-sort-header="created_date">Created Date</th>
     <th>Employee ID</th>
-    <th scope="col" sortable="first_name" (sort)="onSort.emit($event)">First Name</th>
-    <th scope="col" sortable="last_name" (sort)="onSort.emit($event)">Last Name</th>
-    <th scope="col" sortable="department" (sort)="onSort.emit($event)">Department</th>
-    <th scope="col" sortable="last_user" (sort)="onSort.emit($event)">Last User</th>
+    <th mat-sort-header="first_name">First Name</th>
+    <th mat-sort-header="last_name">Last Name</th>
+    <th mat-sort-header="department">Department</th>
+    <th>Last User</th>
     <th>Status</th>
-    <th>Hire Date</th>
+    <th mat-sort-header="hire_date">Hire Date</th>
     <th *ngIf="dashboardStatus === 'invalid' || dashboardStatus === 'temp'">Action</th>
   </tr>
-
   <tr *ngFor="let request of requests | async | slice:(pageSize*pageIndex):(pageSize*pageIndex+pageSize)">
     <td>{{ request.created_date | date:'medium' }}</td>
     <td>{{ request.employee_id }}</td>
@@ -42,3 +41,6 @@
     </td>
   </tr>
 </table>
+
+<!--display load spinner if loading-->
+<img *ngIf="(requests | async) == null" src="assets/image/loading.gif" class="loading" />

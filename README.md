@@ -1,4 +1,4 @@
-This project was designed for Carnegie System Access Request Approval Process.
+This project was designed for Carnegie Invalid SSN Management Process.
 
 The backend endpoint is configured in PHP and data saved in MySQL.
 

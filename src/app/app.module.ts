@@ -9,9 +9,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { RequestListComponent } from './dashboard/request-list/request-list.component';
 import { CookieService } from 'ngx-cookie-service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { SortableDirective } from './sortable.directive';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatInputModule, MatFormFieldModule, MatAutocompleteModule, MatSelectModule, MatCardModule, MatSnackBarModule, MatPaginatorModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatInputModule, MatFormFieldModule, MatAutocompleteModule, MatSelectModule, MatCardModule, MatSnackBarModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 
 
 @NgModule({
@@ -19,7 +18,6 @@ import { MatButtonModule, MatCheckboxModule, MatInputModule, MatFormFieldModule,
     AppComponent,
     DashboardComponent,
     RequestListComponent,
-    SortableDirective,
   ],
   imports: [
     BrowserModule,
@@ -37,6 +35,7 @@ import { MatButtonModule, MatCheckboxModule, MatInputModule, MatFormFieldModule,
     MatCardModule,
     MatSnackBarModule,
     MatPaginatorModule,
+    MatSortModule,
     NgbModule
   ],
   providers: [CookieService],

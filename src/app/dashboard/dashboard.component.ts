@@ -1,12 +1,11 @@
-import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ApiService } from '../api.service';
-import { SortableDirective, SortEvent, Compare } from '../sortable.directive';
 import { Request } from '../request';
 import { map, tap, startWith, switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from "rxjs";
-import { MatSnackBar, PageEvent } from '@angular/material';
+import { MatSnackBar, PageEvent, Sort } from '@angular/material';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,13 +38,6 @@ export class DashboardComponent implements OnInit {
             debounceTime(200),
             distinctUntilChanged(),
             switchMap(term => this.apiService.searchRequests(this.dashboardStatus, term)
-                // .pipe(
-                //     map(
-                //         (requests) => {
-                //           return requests.filter((request) => { return request.status.includes(this.dashboardStatus); });
-                //         }
-                //     ),
-                // )
             ),
         );
   }
@@ -98,55 +90,41 @@ export class DashboardComponent implements OnInit {
             debounceTime(200),
             distinctUntilChanged(),
             switchMap(term => this.apiService.searchRequests(this.dashboardStatus, term)
-                // .pipe(
-                //     map(
-                //         (requests) => {
-                //           return requests.filter((request) => { return request.status.includes(this.dashboardStatus); });
-                //         }
-                //     ),
-                // )
             ),
         );
   }
 
-  // sort requests
-  // sorting requests list table
-  @ViewChildren(SortableDirective) headers: QueryList<SortableDirective>;
-  sortRequests({column, direction}: SortEvent) {
-    // resetting other headers
-    this.headers.forEach(header => {
-      if (header.sortable !== column) {
-        header.direction = '';
-      }
-    });
-
-    // sorting requests
-    if (direction === '') {
-      // sort by date when direction is reset to default
-      this.requests$ = this.requests$.pipe(
-          tap(
-              (r: any[]) => {
-                r.sort((a, b) => { return b.created_date-a.created_date; });
-              }
-          )
-      );
-    } else {
-      // set string column
-      this.requests$ = this.requests$.pipe(
-          tap(
-              (r: any[]) => {
-                r.sort((a, b) => {
-                  const res = Compare(a[column], b[column]);
-                  return direction === 'asc' ? res : -res;
-                });
-              }
-          )
-      );
-    }
-  }
-
-  // MatPaginator Output
+  // Mat Paginator Output
   pageEvent: PageEvent;
   pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 25];
+
+  //Mat Sort
+  sortDataControl(sort: Sort) {
+    if (!sort.active || sort.direction === '') {
+      return;
+    }
+
+    function compare(a: number | string, b: number | string, isAsc: boolean) {
+      return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+    }
+
+    this.requests$ = this.requests$.pipe(
+        tap(
+            requests => {
+              requests.sort((a, b) => {
+                const isAsc = sort.direction === 'asc';
+                switch (sort.active) {
+                  case 'created_date': return compare(a.created_date, b.created_date, isAsc);
+                  case 'first_name': return compare(a.first_name, b.first_name, isAsc);
+                  case 'last_name': return compare(a.last_name, b.last_name, isAsc);
+                  case 'department': return compare(a.department, b.department, isAsc);
+                  case 'hire_date': return compare(a.hire_date, b.hire_date, isAsc);
+                  default: return 0;
+                }
+              });
+            }
+        )
+    );
+  }
 }

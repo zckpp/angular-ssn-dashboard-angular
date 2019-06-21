@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Request } from '../../request';
-import { SortEvent } from '../../sortable.directive';
 
 @Component({
   selector: 'app-request-list',
@@ -18,7 +17,7 @@ export class RequestListComponent implements OnInit {
   @Output() requestTemp = new EventEmitter<Request>();
   @Output() requestResolved = new EventEmitter<Request>();
   @Output() statusChange = new EventEmitter<string>();
-  @Output() onSort = new EventEmitter<SortEvent>();
+  @Output() sortData = new EventEmitter<any>();
 
   constructor() { }
 

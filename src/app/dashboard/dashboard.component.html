@@ -12,10 +12,9 @@
         </mat-form-field>
     </div>
     <br>
-    <!--display load spinner if loading-->
-    <img *ngIf="(requests$ | async) == null" src="assets/image/loading.gif" width="400px" />
-    <!--display requests if authed and loaded-->
-    <app-request-list *ngIf="user !== '' && (requests$ | async) !== null"
+
+    <!--display requests if authed-->
+    <app-request-list *ngIf="user !== ''"
             [requests]="requests$"
             [dashboardStatus]="dashboardStatus"
             [pageSize]="pageEvent?pageEvent.pageSize:this.pageSize"
@@ -23,7 +22,7 @@
             (requestTemp)="tempRequest($event)"
             (requestResolved)="resolveRequest($event)"
             (statusChange)="changeStatus($event)"
-            (onSort)="sortRequests($event)"
+            (sortData)="sortDataControl($event)"
     >
     </app-request-list>
     <mat-paginator [length]="(requests$ | async)?.length"
