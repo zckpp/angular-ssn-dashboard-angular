@@ -20,7 +20,7 @@
     <th>Last User</th>
     <th>Status</th>
     <th mat-sort-header="hire_date">Hire Date</th>
-    <th *ngIf="dashboardStatus === 'invalid' || dashboardStatus === 'temp'">Action</th>
+    <th>Action</th>
   </tr>
   <tr *ngFor="let request of requests | async | slice:(pageSize*pageIndex):(pageSize*pageIndex+pageSize)">
     <td>{{ request.created_date | date:'medium' }}</td>
@@ -37,7 +37,14 @@
       <button class="btn btn-success"(click)="requestResolved.emit(request)">Resolve</button>
     </td>
     <td *ngIf="dashboardStatus === 'temp'">
+      <button class="btn btn-danger"(click)="requestInvalid.emit(request)">Invalid</button>
+      &nbsp;
       <button class="btn btn-success"(click)="requestResolved.emit(request)">Resolve</button>
+    </td>
+    <td *ngIf="dashboardStatus === 'resolved'">
+      <button class="btn btn-danger"(click)="requestInvalid.emit(request)">Invalid</button>
+      &nbsp;
+      <button class="btn btn-info" (click)="requestTemp.emit(request)">Temporary</button>
     </td>
   </tr>
 </table>

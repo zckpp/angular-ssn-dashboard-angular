@@ -63,8 +63,14 @@ export class DashboardComponent implements OnInit {
           this.snackBar.open('Request is resolved!', 'close', {
             duration: 3000,
             verticalPosition: 'top',
-            panelClass: 'decline'
+            panelClass: 'approve'
           });
+        } else if ('invalid' === value) {
+            this.snackBar.open('Request is invalid!', 'close', {
+              duration: 3000,
+              verticalPosition: 'top',
+              panelClass: 'decline'
+            });
         }
       }
       else alert("Operation failed on database, please try again.");
@@ -77,6 +83,10 @@ export class DashboardComponent implements OnInit {
 
   resolveRequest(request: Request){
     this.updateRequest(request, 'resolved');
+  }
+
+  invalidRequest(request: Request){
+    this.updateRequest(request, 'invalid');
   }
 
   // get different view based on status then pass it down to request list display

@@ -21,6 +21,7 @@
             [pageIndex]="pageEvent?pageEvent.pageIndex:0"
             (requestTemp)="tempRequest($event)"
             (requestResolved)="resolveRequest($event)"
+            (requestInvalid)="invalidRequest($event)"
             (statusChange)="changeStatus($event)"
             (sortData)="sortDataControl($event)"
     >
@@ -30,4 +31,5 @@
                    [pageSizeOptions]="pageSizeOptions"
                    (page)="pageEvent = $event">
     </mat-paginator>
+
 </mat-card >
