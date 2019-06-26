@@ -9,4 +9,5 @@ export interface Request {
     change_date: any;
     created_date: any;
     hire_date: any;
+    note: string;
 }

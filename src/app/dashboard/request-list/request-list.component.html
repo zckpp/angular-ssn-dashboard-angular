@@ -31,20 +31,11 @@
     <td>{{ request.last_user }}</td>
     <td>{{ request.status }}</td>
     <td>{{ request.hire_date | date:'mediumDate'}}</td>
-    <td *ngIf="dashboardStatus === 'invalid'">
-      <button class="btn btn-info" (click)="requestTemp.emit(request)">Temporary</button>
-      &nbsp;
-      <button class="btn btn-success"(click)="requestResolved.emit(request)">Resolve</button>
-    </td>
-    <td *ngIf="dashboardStatus === 'temp'">
-      <button class="btn btn-danger"(click)="requestInvalid.emit(request)">Invalid</button>
-      &nbsp;
-      <button class="btn btn-success"(click)="requestResolved.emit(request)">Resolve</button>
-    </td>
-    <td *ngIf="dashboardStatus === 'resolved'">
-      <button class="btn btn-danger"(click)="requestInvalid.emit(request)">Invalid</button>
-      &nbsp;
-      <button class="btn btn-info" (click)="requestTemp.emit(request)">Temporary</button>
+    <td>
+      <button *ngIf="dashboardStatus === 'temp' || dashboardStatus === 'resolved'" class="btn btn-danger"(click)="requestInvalid.emit(request)">Invalid</button>
+      <button *ngIf="dashboardStatus === 'invalid' || dashboardStatus === 'resolved'" class="btn btn-info" (click)="requestTemp.emit(request)">Temporary</button>
+      <button *ngIf="dashboardStatus === 'invalid' || dashboardStatus === 'temp'" class="btn btn-success"(click)="requestResolved.emit(request)">Resolve</button>
+      <button mat-raised-button (click)="editNote.emit(request)">Note<span *ngIf="request.note !== ''" style="color: red">*</span></button>
     </td>
   </tr>
 </table>

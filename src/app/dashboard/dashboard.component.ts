@@ -8,6 +8,8 @@ import { Observable } from "rxjs";
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { RequestNoteComponent } from './request-note/request-note.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,33 +24,34 @@ export class DashboardComponent implements OnInit {
   dashboardStatus: string;
   termFilter = new FormControl('');
   user: string;
+  selected_request: Request;
 
   constructor(
       private apiService: ApiService,
       private cookieService: CookieService,
-      private snackBar: MatSnackBar
+      private snackBar: MatSnackBar,
+      public dialog: MatDialog
   ) { }
 
   ngOnInit() {
-    // start with request list with pending status
+    // start with request list with invalid status
     this.changeStatus("invalid");
     this.user = this.cookieService.get('ssn_app_user_name');
-    this.requests$ = this.termFilter.valueChanges
-        .pipe(
-            //start with empty string to show all result
-            startWith<string>(""),
-            debounceTime(200),
-            distinctUntilChanged(),
-            switchMap(term => this.apiService.searchRequests(this.dashboardStatus, term)
-            ),
-        );
   }
 
   // methods
   updateRequest(request: Request, value){
-    request.status = value;
+    // update request status
+    let action :string;
+    if ('note' !== value) {
+      request.status = value;
+      action = 'status';
+    } else {
+      // update request note
+      action = 'note';
+    }
     // use any here so that the condition statement won't generate error
-    this.apiService.updateRequest(request).subscribe((response: any) => {
+    this.apiService.updateRequest(request, action).subscribe((response: any) => {
       // status response configured in php app
       console.log(response);
       // if succeed, then update request list view
@@ -56,7 +59,7 @@ export class DashboardComponent implements OnInit {
         this.changeStatus(this.dashboardStatus);
         // set up snackBar pop up
         if ('temp' === value) {
-          this.snackBar.open('Request is assinged with temporary SSN!', 'close', {
+          this.snackBar.open('Request is assigned with temporary SSN!', 'close', {
             duration: 3000,
             verticalPosition: 'top',
             panelClass: 'approve'
@@ -73,6 +76,12 @@ export class DashboardComponent implements OnInit {
               verticalPosition: 'top',
               panelClass: 'decline'
             });
+        } else if ('note' === value) {
+          this.snackBar.open('Your note is saved!', 'close', {
+            duration: 3000,
+            verticalPosition: 'top',
+            panelClass: 'approve'
+          });
         }
       }
       else alert("Operation failed on database, please try again.");
@@ -111,7 +120,7 @@ export class DashboardComponent implements OnInit {
   pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 25];
 
-  //Mat Sort
+  // Mat Sort
   sortDataControl(sort: Sort) {
     if (!sort.active || sort.direction === '') {
       return;
@@ -138,5 +147,20 @@ export class DashboardComponent implements OnInit {
             }
         )
     );
+  }
+
+  // Mat dialog
+  openDialog(request: Request): void {
+    const dialogRef = this.dialog.open(RequestNoteComponent, {
+      width: '450px',
+      data: request
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result) {
+        this.updateRequest(result, 'note');
+      }
+    });
   }
 }

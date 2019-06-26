@@ -45,8 +45,8 @@ export class ApiService {
         );
     }
 
-    updateRequest(request: Request){
-        return this.httpClient.put<Request>(`${this.PHP_API_SERVER}/update.php`, request);
+    updateRequest(request: Request,  term: string){
+        return this.httpClient.put<Request>(`${this.PHP_API_SERVER}/update.php?action=${term}`, request);
     }
 
     deleteRequest(id: number){

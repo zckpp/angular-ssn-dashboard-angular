@@ -20,13 +20,15 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
-
+import { MatDialogModule } from '@angular/material/dialog';
+import { RequestNoteComponent } from './dashboard/request-note/request-note.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     RequestListComponent,
+    RequestNoteComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,9 +47,11 @@ import { MatSortModule } from '@angular/material/sort';
     MatSnackBarModule,
     MatPaginatorModule,
     MatSortModule,
+    MatDialogModule,
     NgbModule
   ],
   providers: [CookieService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [RequestNoteComponent]
 })
 export class AppModule { }

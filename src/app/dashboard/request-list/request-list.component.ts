@@ -17,6 +17,7 @@ export class RequestListComponent implements OnInit {
   @Output() requestTemp = new EventEmitter<Request>();
   @Output() requestResolved = new EventEmitter<Request>();
   @Output() requestInvalid = new EventEmitter<Request>();
+  @Output() editNote = new EventEmitter<Request>();
   @Output() statusChange = new EventEmitter<string>();
   @Output() sortData = new EventEmitter<any>();
 

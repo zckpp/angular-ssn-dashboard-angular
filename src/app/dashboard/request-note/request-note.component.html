@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Note for {{data.first_name}} {{data.last_name}}</h1>
+<div mat-dialog-content>
+    <p>*If you delete previous texts, they will be lost.</p>
+    <p>*You must click "save" to permanently save the note.</p>
+    <div class="row">
+        <mat-form-field class="col-md-12">
+        <textarea matInput [(ngModel)]="data.note" rows="6"></textarea>
+        </mat-form-field>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button [mat-dialog-close]="data" class="btn btn-success" cdkFocusInitial>Save</button>
+</div>
