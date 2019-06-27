@@ -24,7 +24,6 @@ export class DashboardComponent implements OnInit {
   dashboardStatus: string;
   termFilter = new FormControl('');
   user: string;
-  selected_request: Request;
 
   constructor(
       private apiService: ApiService,
@@ -36,6 +35,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     // start with request list with invalid status
     this.changeStatus("invalid");
+    // get user name set in cookie for authentication and action tracking
     this.user = this.cookieService.get('ssn_app_user_name');
   }
 
@@ -106,12 +106,12 @@ export class DashboardComponent implements OnInit {
     this.termFilter.setValue("");
     this.requests$ = this.termFilter.valueChanges
         .pipe(
-            //start with empty string to show all result
+            // start with empty string to show all result
             startWith<string>(""),
             debounceTime(200),
             distinctUntilChanged(),
-            switchMap(term => this.apiService.searchRequests(this.dashboardStatus, term)
-            ),
+            // search database with current dashboard status and name
+            switchMap(term => this.apiService.searchRequests(this.dashboardStatus, term)),
         );
   }
 
@@ -125,11 +125,9 @@ export class DashboardComponent implements OnInit {
     if (!sort.active || sort.direction === '') {
       return;
     }
-
     function compare(a: number | string, b: number | string, isAsc: boolean) {
       return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
     }
-
     this.requests$ = this.requests$.pipe(
         tap(
             requests => {
@@ -149,13 +147,12 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  // Mat dialog
+  // Mat dialog for note
   openDialog(request: Request): void {
     const dialogRef = this.dialog.open(RequestNoteComponent, {
       width: '450px',
       data: request
     });
-
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result) {

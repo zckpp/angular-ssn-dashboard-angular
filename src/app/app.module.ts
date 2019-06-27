@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatBadgeModule } from '@angular/material/badge';
 import { RequestNoteComponent } from './dashboard/request-note/request-note.component';
 
 @NgModule({
@@ -48,6 +49,7 @@ import { RequestNoteComponent } from './dashboard/request-note/request-note.comp
     MatPaginatorModule,
     MatSortModule,
     MatDialogModule,
+    MatBadgeModule,
     NgbModule
   ],
   providers: [CookieService],
