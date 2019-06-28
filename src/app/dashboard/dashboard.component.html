@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>Carnegie Invalid SSN Dashboard</h1>
+    <h1>Carnegie Invalid SSN Tracker</h1>
 </div>
 <br>
 <mat-card  class="container">
@@ -27,10 +27,10 @@
             (sortData)="sortDataControl($event)"
     >
     </app-request-list>
+
     <mat-paginator [length]="(requests$ | async)?.length"
                    [pageSize]="pageSize"
                    [pageSizeOptions]="pageSizeOptions"
                    (page)="pageEvent = $event">
     </mat-paginator>
-
 </mat-card >

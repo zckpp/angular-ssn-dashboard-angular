@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     // start with request list with invalid status
-    this.changeStatus("invalid");
+    this.changeStatus("Invalid");
     // get user name set in cookie for authentication and action tracking
     this.user = this.cookieService.get('ssn_app_user_name');
   }
@@ -89,15 +89,15 @@ export class DashboardComponent implements OnInit {
   }
 
   tempRequest(request: Request){
-    this.updateRequest(request, 'temp');
+    this.updateRequest(request, 'Temporary');
   }
 
   resolveRequest(request: Request){
-    this.updateRequest(request, 'resolved');
+    this.updateRequest(request, 'Resolved');
   }
 
   invalidRequest(request: Request){
-    this.updateRequest(request, 'invalid');
+    this.updateRequest(request, 'Invalid');
   }
 
   // get different view based on status then pass it down to request list display
@@ -110,7 +110,13 @@ export class DashboardComponent implements OnInit {
             startWith<string>(""),
             debounceTime(200),
             distinctUntilChanged(),
-            // search database with current dashboard status and name
+            // when searching unfocus status tab
+            tap(term => {
+              if (term !== "") {
+                this.dashboardStatus = "all";
+              }
+            }),
+            // search database with current dashboard status and name, php ignore status for now
             switchMap(term => this.apiService.searchRequests(this.dashboardStatus, term)),
         );
   }
