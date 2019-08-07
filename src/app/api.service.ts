@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Request } from  './request';
-import { CategoryGroup } from  './category';
 import { Observable } from  'rxjs';
 import { tap, map } from 'rxjs/operators';
 

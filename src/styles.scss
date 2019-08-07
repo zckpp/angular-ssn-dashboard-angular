@@ -1,32 +1,36 @@
 /* Import material theme css */
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
-@media (min-width: 1200px) {
-    .container {
-        max-width: 1340px;
-    }
-}
-/* Snackbar css */
-.grant .mat-simple-snackbar, .approve .mat-simple-snackbar {
-    color: green;
-}
-.decline .mat-simple-snackbar {
-    color: red;
-}
-.mat-snack-bar-container {
-    background: #fdfdfd;
-}
+$carnegie-dark-blue: #163671;
+$carnegie-light-blue: #5eb6cd;
+$carnegie-brown: #c49a6c;
+$carnegie-green: #96ca4f;
+$background-grey: #fdfdfd;
 
-/* Footer logo */
-img.logo {
-    max-width: 50px;
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-}
-
-// material overlay select list
-.cdk-overlay-container {
-    div.mat-select-panel {
-        max-height: 350px;
-    }
+body {
+  background-color: #f9f9f9;
+  @media (min-width: 1200px) {
+      .container {
+          max-width: 1340px;
+      }
+  }
+  /* Snackbar css */
+  .grant .mat-simple-snackbar, .approve .mat-simple-snackbar {
+      color: $carnegie-green;
+  }
+  .decline .mat-simple-snackbar {
+      color: red;
+  }
+  .mat-snack-bar-container {
+      background: $background-grey;
+  }
+  /* logo */
+  img.logo {
+      max-width: 60px;
+      position: absolute;
+  }
+  h1.header {
+    text-align: left;
+    margin-left: 80px;
+    color: $carnegie-dark-blue;
+  }
 }

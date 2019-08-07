@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
     // start with request list with invalid status
     this.changeStatus("Invalid");
     // get user name set in cookie for authentication and action tracking
-    this.user = this.cookieService.get('ssn_app_user_name');
+    this.user = this.cookieService.get('ERrDDpC4A1qj7ESpp9ox6bNM0qA8g7YswIZsEA5Fj2k2w');
   }
 
   // methods
@@ -110,7 +110,7 @@ export class DashboardComponent implements OnInit {
             startWith<string>(""),
             debounceTime(200),
             distinctUntilChanged(),
-            // when searching unfocus status tab
+            // when user start searching unfocus status tab
             tap(term => {
               if (term !== "") {
                 this.dashboardStatus = "all";

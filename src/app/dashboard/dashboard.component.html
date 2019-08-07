@@ -1,36 +1,35 @@
 <div class="container">
-    <h1>Carnegie Invalid SSN Tracker</h1>
+  <h1 class="header">Carnegie Invalid SSN Tracker</h1>
+  <br>
+  <mat-card>
+      <h2 *ngIf="user === ''">{{ user }}Please log into <a href="https://mycarnegie.carnegiescience.edu">myCarnegie</a> first</h2>
+      <br>
+      <div class="row">
+          <mat-form-field class="col-md-6">
+              <input matInput placeholder="Search By Name" type="text" autocomplete="off" [formControl]="termFilter">
+          </mat-form-field>
+      </div>
+      <br>
+
+      <!--display requests if authed-->
+      <app-request-list *ngIf="user !== ''"
+              [requests]="requests$"
+              [dashboardStatus]="dashboardStatus"
+              [pageSize]="pageEvent?pageEvent.pageSize:this.pageSize"
+              [pageIndex]="pageEvent?pageEvent.pageIndex:0"
+              (requestTemp)="tempRequest($event)"
+              (requestResolved)="resolveRequest($event)"
+              (requestInvalid)="invalidRequest($event)"
+              (editNote)="openDialog($event)"
+              (statusChange)="changeStatus($event)"
+              (sortData)="sortDataControl($event)"
+      >
+      </app-request-list>
+
+      <mat-paginator [length]="(requests$ | async)?.length"
+                     [pageSize]="pageSize"
+                     [pageSizeOptions]="pageSizeOptions"
+                     (page)="pageEvent = $event">
+      </mat-paginator>
+  </mat-card >
 </div>
-<br>
-<mat-card  class="container">
-    <h2 *ngIf="user === ''">{{ user }}Please log into <a href="https://mycarnegie.carnegiescience.edu">myCarnegie</a> first</h2>
-
-    <br>
-    <div class="row">
-        <mat-form-field class="col-md-6">
-            <input matInput placeholder="Search By Name" type="text" autocomplete="off" [formControl]="termFilter">
-        </mat-form-field>
-    </div>
-    <br>
-
-    <!--display requests if authed-->
-    <app-request-list *ngIf="user !== ''"
-            [requests]="requests$"
-            [dashboardStatus]="dashboardStatus"
-            [pageSize]="pageEvent?pageEvent.pageSize:this.pageSize"
-            [pageIndex]="pageEvent?pageEvent.pageIndex:0"
-            (requestTemp)="tempRequest($event)"
-            (requestResolved)="resolveRequest($event)"
-            (requestInvalid)="invalidRequest($event)"
-            (editNote)="openDialog($event)"
-            (statusChange)="changeStatus($event)"
-            (sortData)="sortDataControl($event)"
-    >
-    </app-request-list>
-
-    <mat-paginator [length]="(requests$ | async)?.length"
-                   [pageSize]="pageSize"
-                   [pageSizeOptions]="pageSizeOptions"
-                   (page)="pageEvent = $event">
-    </mat-paginator>
-</mat-card >

@@ -9,7 +9,7 @@ import { Request } from '../../request';
 
 export class RequestListComponent implements OnInit {
 
-  // receive requests from dashboard and emit approve and decline operations
+  // receive requests from dashboard and emit event operations
   @Input() requests;
   @Input() dashboardStatus;
   @Input() pageSize;
