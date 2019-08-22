@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Request } from  './request';
-import { Observable } from  'rxjs';
+import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
-    // PHP_API_SERVER = "http://127.0.0.1/angular-ssn/backend/api";
-    PHP_API_SERVER = "https://mycarnegie.carnegiescience.edu/sites/default/ssn/backend/api";
+    PHP_API_SERVER = "http://127.0.0.1/angular-ssn/backend/api";
     constructor(private httpClient: HttpClient) {}
 
     readRequests(status: string): Observable<Request[]>{

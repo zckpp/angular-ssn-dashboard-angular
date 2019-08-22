@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ApiService } from '../api.service';
 import { Request } from '../request';
-import { map, tap, startWith, switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { tap, startWith, switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from "rxjs";
 import { PageEvent } from '@angular/material/paginator';
@@ -36,12 +36,12 @@ export class DashboardComponent implements OnInit {
     // start with request list with invalid status
     this.changeStatus("Invalid");
     // get user name set in cookie for authentication and action tracking
-    this.user = this.cookieService.get('ERrDDpC4A1qj7ESpp9ox6bNM0qA8g7YswIZsEA5Fj2k2w');
+    this.user = this.cookieService.get('cookie_auth');
   }
 
   // methods
   updateRequest(request: Request, value){
-    // update request status
+    // update request status or add note
     let action :string;
     if ('note' !== value) {
       request.status = value;
@@ -52,8 +52,6 @@ export class DashboardComponent implements OnInit {
     }
     // use any here so that the condition statement won't generate error
     this.apiService.updateRequest(request, action).subscribe((response: any) => {
-      // status response configured in php app
-      console.log(response);
       // if succeed, then update request list view
       if (response.status == "succeed") {
         this.changeStatus(this.dashboardStatus);
@@ -110,7 +108,7 @@ export class DashboardComponent implements OnInit {
             startWith<string>(""),
             debounceTime(200),
             distinctUntilChanged(),
-            // when user start searching unfocus status tab
+            // when user start searching un-focus status tab
             tap(term => {
               if (term !== "") {
                 this.dashboardStatus = "all";
@@ -160,7 +158,7 @@ export class DashboardComponent implements OnInit {
       data: request
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // update request list after saving note
       if (result) {
         this.updateRequest(result, 'note');
       }
