@@ -1,6 +1,6 @@
-This project was designed for Carnegie Invalid SSN Management Process.
+This project was designed for Carnegie Invalid SSN Management Process frontend application.
 
-The backend endpoint is configured in PHP and data saved in MySQL.
+The backend endpoint is built in PHP.
 
 
 
